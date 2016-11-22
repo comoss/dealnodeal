@@ -41,7 +41,7 @@ class board {
         this.name = name;
 
         this.boardContainer = document.createElement("div");
-        this.boardContainer.className = "col-xs-6";
+        this.boardContainer.className = "col-xs-12 col-md-6";
 
         this.dollarAmounts = [10, 20, 30, 40, 50, 60, 75, 80, 90, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 1000];
         this.cases = [];
