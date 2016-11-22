@@ -1,0 +1,12 @@
+{
+  "name": "dealnodeal",
+  "version": "0.0.0",
+  "description": "dealnodeal",
+  "main": "app.js",
+  "author": {
+    "name": "Cody Moss"
+  },
+  "dependencies": {
+    "bootstrap-v4-dev": "^4.0.0-alpha.5"
+  }
+}
