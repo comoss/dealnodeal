@@ -53,7 +53,7 @@ export class createGameForm {
 
         for (let i = 0; i < 26; i++) {
             const group = new inputGroup();
-            group.text.defaultValue(`Case ${i + 1}`);
+            group.text.defaultValue(formatStrings.currency(this.defaults[i]));
             group.value.defaultValue(this.defaults[i]);
             this.inputGroups.push(group);
             this.amountsInput.append(group.container.el());

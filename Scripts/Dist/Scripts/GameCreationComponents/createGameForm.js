@@ -1,4 +1,4 @@
-define(["require", "exports", "../UIComponents/Button", "./inputGroup", "../UIComponents/div", "../UIComponents/input"], function (require, exports, Button_1, inputGroup_1, div_1, input_1) {
+define(["require", "exports", "../UIComponents/Button", "./inputGroup", "../UIComponents/div", "../UIComponents/input", "../Utils/formatStrings"], function (require, exports, Button_1, inputGroup_1, div_1, input_1, formatStrings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createGameForm = void 0;
@@ -32,7 +32,7 @@ define(["require", "exports", "../UIComponents/Button", "./inputGroup", "../UICo
             this.mainContainer.append(this.teamInputGroup.el());
             for (var i = 0; i < 26; i++) {
                 var group = new inputGroup_1.inputGroup();
-                group.text.defaultValue("Case ".concat(i + 1));
+                group.text.defaultValue(formatStrings_1.formatStrings.currency(this.defaults[i]));
                 group.value.defaultValue(this.defaults[i]);
                 this.inputGroups.push(group);
                 this.amountsInput.append(group.container.el());
