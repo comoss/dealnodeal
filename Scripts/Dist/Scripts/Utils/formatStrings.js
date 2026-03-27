@@ -1,5 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.formatStrings = void 0;
     var formatStrings;
     (function (formatStrings) {
         // currency formatter: $140.23
@@ -7,7 +9,7 @@ define(["require", "exports"], function (require, exports) {
             return currencyString.toLocaleString("en-US", { style: "currency", currency: "USD" });
         }
         formatStrings.currency = currency;
-    })(formatStrings = exports.formatStrings || (exports.formatStrings = {}));
+    })(formatStrings || (exports.formatStrings = formatStrings = {}));
     ;
 });
 //# sourceMappingURL=formatStrings.js.map

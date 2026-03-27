@@ -1,6 +1,8 @@
-define(["require", "exports", '../UIComponents/Button', './inputGroup', '../UIComponents/div', '../UIComponents/input', '../Utils/formatStrings'], function (require, exports, Button_1, inputGroup_1, div_1, input_1, formatStrings_1) {
+define(["require", "exports", "../UIComponents/Button", "./inputGroup", "../UIComponents/div", "../UIComponents/input", "../Utils/formatStrings"], function (require, exports, Button_1, inputGroup_1, div_1, input_1, formatStrings_1) {
     "use strict";
-    var createGameForm = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.createGameForm = void 0;
+    var createGameForm = /** @class */ (function () {
         function createGameForm() {
             this.mainContainer = new div_1.div();
             this.teamName = new input_1.input();
@@ -9,9 +11,11 @@ define(["require", "exports", '../UIComponents/Button', './inputGroup', '../UICo
             this.teamInputGroup = new div_1.div();
             this.amountsInput = new div_1.div();
             this.hideAmountsInputGroup = new Button_1.Button();
-            this.defaults = [10, 20, 30, 40, 50, 60, 75, 80, 90, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 1000];
+            // Real Deal or No Deal US values (26 cases)
+            this.defaults = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
             this.showinputs = new Button_1.Button();
-            this.teamName.placeholder("Team name");
+            this.mainContainer.addClass("setup-form");
+            this.teamName.placeholder("Player name");
             this.teamName.addClass("form-control");
             this.teamName.id("gameName");
             this.newGameButton.addClass("btn");
@@ -21,34 +25,36 @@ define(["require", "exports", '../UIComponents/Button', './inputGroup', '../UICo
             this.newGameButton.el().id = 'newGame';
             this.teamInputGroup.append(this.teamName.el());
             this.newGameButton.appendto(this.teamInputGroup.el());
-            this.teamInputGroup.addClass("form-inline");
+            this.teamInputGroup.addClass("d-flex");
+            this.teamInputGroup.addClass("align-items-center");
+            this.teamInputGroup.addClass("gap-2");
+            this.teamInputGroup.addClass("mb-2");
             this.mainContainer.append(this.teamInputGroup.el());
             for (var i = 0; i < 26; i++) {
                 var group = new inputGroup_1.inputGroup();
-                var str = this.defaults[i];
-                group.text.defaultValue(formatStrings_1.formatStrings.currency(str));
-                group.value.defaultValue(str);
+                group.text.defaultValue(formatStrings_1.formatStrings.currency(this.defaults[i]));
+                group.value.defaultValue(this.defaults[i]);
                 this.inputGroups.push(group);
                 this.amountsInput.append(group.container.el());
             }
+            this.amountsInput.addClass("row");
+            this.amountsInput.addClass("g-1");
             this.mainContainer.append(this.amountsInput.el());
             this.teamInputGroup.append(this.showinputs.el());
             this.teamInputGroup.append(this.hideAmountsInputGroup.el());
             var ai = this.amountsInput;
             var hi = this.hideAmountsInputGroup;
-            hi.text("hide");
+            hi.text("Hide Values");
             hi.addClass("btn");
-            hi.addClass("btn-info");
-            hi.addClass("col-xs-12");
-            hi.addClass("col-sm-2");
+            hi.addClass("btn-outline-secondary");
+            hi.addClass("btn-sm");
             hi.show();
             var so = this.showinputs;
-            so.text("Show");
+            so.text("Edit Values");
             so.addClass("btn");
-            so.addClass("btn-info");
+            so.addClass("btn-outline-secondary");
+            so.addClass("btn-sm");
             so.hide();
-            so.addClass("col-xs-12");
-            so.addClass("col-sm-2");
             hi.el().addEventListener("click", function () {
                 ai.hide();
                 hi.hide();

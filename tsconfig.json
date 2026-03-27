@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "ES5",
+    "outDir": "Scripts/Dist/Scripts",
+    "rootDir": "Scripts",
+    "sourceMap": true,
+    "strict": false,
+    "lib": ["ES5", "ES2015", "DOM"]
+  },
+  "include": ["Scripts/**/*.ts"],
+  "exclude": ["Scripts/Dist", "Scripts/config.ts"]
+}

@@ -1,13 +1,22 @@
 {
   "name": "dealnodeal",
-  "version": "0.0.0",
-  "description": "dealnodeal",
+  "version": "1.0.0",
+  "description": "Deal or No Deal browser game",
   "main": "app.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "npx http-server . -p 8080 -o"
+  },
   "author": {
     "name": "Cody Moss"
   },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/requirejs": "^2.1.36"
+  },
   "dependencies": {
-    "bootstrap-v4-dev": "^4.0.0-alpha.5",
-    "definitely-typed-requirejs": "^1.0.0"
+    "bootstrap": "^5.3.3",
+    "requirejs": "^2.3.7"
   }
 }

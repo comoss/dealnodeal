@@ -25,14 +25,16 @@ export class createGameForm {
     teamInputGroup = new div();
     amountsInput = new div();
     hideAmountsInputGroup = new Button();
-    defaults = [10, 20, 30, 40, 50, 60, 75, 80, 90, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 1000];
+    // Real Deal or No Deal US values (26 cases)
+    defaults = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
     showinputs = new Button();
 
-
     constructor() {
-        this.teamName.placeholder("Team name");
+        this.mainContainer.addClass("setup-form");
+
+        this.teamName.placeholder("Player name");
         this.teamName.addClass("form-control");
-        this.teamName.id("gameName")
+        this.teamName.id("gameName");
 
         this.newGameButton.addClass("btn");
         this.newGameButton.addClass("btn-primary");
@@ -42,41 +44,42 @@ export class createGameForm {
 
         this.teamInputGroup.append(this.teamName.el());
         this.newGameButton.appendto(this.teamInputGroup.el());
-        this.teamInputGroup.addClass("form-inline");
+        this.teamInputGroup.addClass("d-flex");
+        this.teamInputGroup.addClass("align-items-center");
+        this.teamInputGroup.addClass("gap-2");
+        this.teamInputGroup.addClass("mb-2");
 
-        this.mainContainer.append(this.teamInputGroup.el())
+        this.mainContainer.append(this.teamInputGroup.el());
 
         for (let i = 0; i < 26; i++) {
             const group = new inputGroup();
-            const str = this.defaults[i];
-            group.text.defaultValue(formatStrings.currency(str));
-            group.value.defaultValue(str);
+            group.text.defaultValue(formatStrings.currency(this.defaults[i]));
+            group.value.defaultValue(this.defaults[i]);
             this.inputGroups.push(group);
             this.amountsInput.append(group.container.el());
         }
 
+        this.amountsInput.addClass("row");
+        this.amountsInput.addClass("g-1");
         this.mainContainer.append(this.amountsInput.el());
         this.teamInputGroup.append(this.showinputs.el());
         this.teamInputGroup.append(this.hideAmountsInputGroup.el());
 
         var ai = this.amountsInput;
         var hi = this.hideAmountsInputGroup;
-        hi.text("hide");
+        hi.text("Hide Values");
         hi.addClass("btn");
-        hi.addClass("btn-info");
-        hi.addClass("col-xs-12");
-        hi.addClass("col-sm-2");
-
+        hi.addClass("btn-outline-secondary");
+        hi.addClass("btn-sm");
         hi.show();
-        var so = this.showinputs;
-        so.text("Show");
-        so.addClass("btn");
-        so.addClass("btn-info");
-        so.hide();
-        so.addClass("col-xs-12");
-        so.addClass("col-sm-2");
 
-        
+        var so = this.showinputs;
+        so.text("Edit Values");
+        so.addClass("btn");
+        so.addClass("btn-outline-secondary");
+        so.addClass("btn-sm");
+        so.hide();
+
         hi.el().addEventListener("click", function () {
             ai.hide();
             hi.hide();
