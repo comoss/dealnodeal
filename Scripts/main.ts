@@ -1,4 +1,4 @@
-﻿import { board } from "./GameComponents/board";
+import { board } from "./GameComponents/board";
 import { showDivButton } from "./GameCreationComponents/showDivButton";
 import { createGameForm } from "./GameCreationComponents/createGameForm";
 
@@ -19,13 +19,13 @@ class main {
 
             const b = new board(savedState.name, fakeInputGroups);
             b.populateValues(boardsContainer);
-            b.restoreState(savedState.cases, savedState.currentOffer);
+            b.restoreState(savedState);
         }
 
         document.getElementById("newGame").addEventListener("click", () => {
             board.clearState();
             boardsContainer.innerHTML = '';
-            const name = (<HTMLInputElement>document.getElementById("gameName")).value.trim();
+            const name = (<HTMLInputElement>document.getElementById("gameName")).value.trim() || "Player";
             const b = new board(name, form.inputGroups);
             b.populateValues(boardsContainer);
         });

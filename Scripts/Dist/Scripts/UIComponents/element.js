@@ -1,6 +1,8 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var element = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.element = void 0;
+    var element = /** @class */ (function () {
         function element(typeOfElement) {
             this.element = document.createElement(typeOfElement);
         }

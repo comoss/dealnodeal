@@ -1,28 +1,450 @@
-﻿﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Deal Or No Deal</title>
-        <link rel="stylesheet" href="./bootstrap.css" />
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Deal Or No Deal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #ffd700;
+            --gold-dim: #b8960a;
+            --gold-glow: rgba(255, 215, 0, 0.45);
+            --dark-bg: #07071a;
+            --card-bg: #10102a;
+            --border-subtle: #252550;
+            --case-blue-start: #1a3060;
+            --case-blue-end: #2a52a0;
+            --text-muted-custom: #7070a0;
+        }
 
-    <body>
-        <div id="app">
-            <nav class="navbar navbar-light bg-faded" id="main">
-                <h2 class="text-xs-center col-md-6 col-xs-12">Deal or No Deal</h2>
-                <!--<div class="col-md-6 col-xs-12 form-inline">
-                    <input id="gameName" class="form-control" placeholder="Team Name" />
-                    <a id="newGame" class="btn btn-primary" style="color:white"><strong>New Game</strong></a>
-                </div>-->
-            </nav>
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image:
+                radial-gradient(ellipse at 50% 0%, #18185a 0%, transparent 60%),
+                radial-gradient(ellipse at 0% 100%, #1a0a30 0%, transparent 50%);
+            color: #ddd8f0;
+            font-family: 'Roboto Condensed', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        .game-header {
+            background: linear-gradient(180deg, #0c0c38 0%, #10103a 100%);
+            border-bottom: 3px solid var(--gold);
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 6px 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .game-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            text-shadow: 0 0 25px var(--gold-glow), 0 0 60px rgba(255, 215, 0, 0.2);
+            margin: 0;
+        }
+
+        .game-subtitle {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            color: var(--text-muted-custom);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* ── SETUP FORM ── */
+        .setup-form {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            background: #0c0c28 !important;
+            border: 1px solid #303068 !important;
+            color: #e0e0ff !important;
+            border-radius: 6px;
+        }
+
+        .form-control::placeholder { color: #505080 !important; }
+
+        .form-control:focus {
+            background: #10102e !important;
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.12) !important;
+            color: #e8e8ff !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--case-blue-start), var(--case-blue-end)) !important;
+            border: 1px solid #4070c0 !important;
+            font-family: 'Oswald', sans-serif !important;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 12px var(--gold-glow) !important;
+        }
+
+        .btn-outline-secondary {
+            border-color: #404070 !important;
+            color: #8080b0 !important;
+            font-size: 0.8rem;
+        }
+
+        .btn-outline-secondary:hover {
+            background: rgba(255,255,255,0.05) !important;
+            color: #a0a0d0 !important;
+        }
+
+        /* ── BOARD CONTAINER ── */
+        .board-container {
+            padding: 0.5rem 0;
+        }
+
+        /* ── PLAYER HEADER ── */
+        .player-header {
+            text-align: center;
+            padding: 0.5rem 0 0.25rem;
+        }
+
+        .player-name {
+            font-family: 'Oswald', sans-serif;
+            color: #c0cce8;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        /* ── ROUND INFO ── */
+        .round-info {
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            color: #9090b8;
+            padding: 0.4rem 0;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .round-info .round-label {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .round-info .cases-to-open {
+            color: #88aaff;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        /* ── CASES GRID ── */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+            gap: 8px;
+            padding: 0.75rem 0;
+        }
+
+        /* ── BRIEFCASE BUTTONS ── */
+        .btn-case {
+            background: linear-gradient(145deg, var(--case-blue-start) 0%, var(--case-blue-end) 100%);
+            border: 2px solid #3a62b8;
+            color: #ffffff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0.65rem 0.4rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+            box-shadow: 0 3px 10px rgba(40, 70, 160, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 64px;
+            text-decoration: none;
+            user-select: none;
+        }
+
+        .btn-case:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 18px var(--gold-glow), 0 3px 10px rgba(40, 70, 160, 0.3);
+            transform: translateY(-3px);
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .btn-case .case-number {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── OPENED CASE ── */
+        .btn-case-opened {
+            background: linear-gradient(145deg, #2a0000 0%, #550000 100%) !important;
+            border: 2px solid #770000 !important;
+            cursor: default !important;
+            transform: none !important;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5) !important;
+        }
+
+        .btn-case-opened:hover {
+            border-color: #770000 !important;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5) !important;
+            transform: none !important;
+            color: inherit !important;
+        }
+
+        .btn-case-opened .case-label {
+            font-size: 0.65rem;
+            color: #886666;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-case-opened .case-reveal-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ff7777;
+            margin-top: 2px;
+        }
+
+        /* ── FINAL WINNING CASE ── */
+        .btn-case-final {
+            background: linear-gradient(145deg, #0a2200 0%, #1a5500 100%) !important;
+            border: 2px solid #44aa00 !important;
+            box-shadow: 0 0 20px rgba(68, 170, 0, 0.4) !important;
+        }
+
+        .btn-case-final .case-reveal-value {
+            color: #88ff44 !important;
+        }
+
+        /* ── OFFER CONTAINER ── */
+        .offer-container {
+            margin: 0.75rem 0;
+        }
+
+        /* ── BANKER CALL ── */
+        .banker-call {
+            background: linear-gradient(135deg, #080820, #121240);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), inset 0 1px 0 rgba(255,215,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .banker-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #7070a8;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .banker-message {
+            color: #8888b0;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .offer-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            color: #9090b8;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+        }
+
+        .offer-amount {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+            line-height: 1.1;
+        }
+
+        /* ── DEAL / NO DEAL BUTTONS ── */
+        .deal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-deal, .btn-no-deal {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 0.7rem 2.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            border: 2px solid;
+        }
+
+        .btn-deal {
+            background: linear-gradient(135deg, #005500, #009900);
+            border-color: #00cc00;
+            color: #ffffff;
+            box-shadow: 0 0 18px rgba(0, 180, 0, 0.35);
+        }
+
+        .btn-deal:hover {
+            background: linear-gradient(135deg, #008800, #00cc00);
+            box-shadow: 0 0 30px rgba(0, 220, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .btn-no-deal {
+            background: linear-gradient(135deg, #550000, #990000);
+            border-color: #cc0000;
+            color: #ffffff;
+            box-shadow: 0 0 18px rgba(180, 0, 0, 0.35);
+        }
+
+        .btn-no-deal:hover {
+            background: linear-gradient(135deg, #880000, #cc0000);
+            box-shadow: 0 0 30px rgba(220, 0, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* ── GAME OVER ── */
+        .game-over-panel {
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+
+        .deal-taken {
+            background: linear-gradient(135deg, #001800, #003300);
+            border: 3px solid #00bb00;
+            box-shadow: 0 0 40px rgba(0, 187, 0, 0.25);
+        }
+
+        .no-deal-end {
+            background: linear-gradient(135deg, #1a1600, #2e2800);
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 40px var(--gold-glow);
+        }
+
+        .game-over-icon { font-size: 2.5rem; margin-bottom: 0.4rem; }
+
+        .game-over-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 7vw, 3rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .game-over-amount {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.5rem, 9vw, 4rem);
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 25px var(--gold-glow);
+            margin: 0.4rem 0;
+            line-height: 1.1;
+        }
+
+        .game-over-name {
+            color: #b0b0d0;
+            font-size: 1.1rem;
+            margin-top: 0.25rem;
+        }
+
+        /* ── VALUES BOARD ── */
+        .values-board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .value-chip {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            transition: opacity 0.3s, color 0.3s;
+        }
+
+        .value-active {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+        }
+
+        .value-gone {
+            background: rgba(80, 0, 0, 0.2);
+            color: #554444;
+            border: 1px solid rgba(80, 0, 0, 0.25);
+            text-decoration: line-through;
+        }
+
+        /* ── CURRENT OFFER TEXT ── */
+        .current-offer-text { display: none; }
+
+        /* ── SCROLLABLE INPUT AREA ── */
+        .amounts-scroll {
+            max-height: 220px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #303060 transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="game-header">
+        <h1 class="game-title">Deal or No Deal</h1>
+        <p class="game-subtitle">The Classic Game Show</p>
+    </header>
+
+    <div class="container-fluid px-3 px-md-4 py-3">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <div id="app"></div>
+                <div id="boardsContainer"></div>
+            </div>
         </div>
+    </div>
 
-        <!--<div id='createGame'></div>-->
-        <div id="boardsContainer" class="col-md-6 col-xs-12 offset-md-3"></div>
-        <script data-main="Scripts/Dist/Scripts/config.js" type="text/javascript" src="../dealnodeal/Scripts/require.js"></script>
-    </body>
+    <script data-main="Scripts/Dist/Scripts/config.js" type="text/javascript" src="Scripts/require.js"></script>
+
+</body>
 
 </html>

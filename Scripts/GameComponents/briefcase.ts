@@ -1,21 +1,20 @@
-import { formatStrings } from "./../Utils/formatStrings";
 import {inputGroup } from '../GameCreationComponents/inputGroup';
 
 export class briefcase {
     button: HTMLAnchorElement;
-    value: number; 
+    value: number;
     status: boolean;
+    label: string;
 
     constructor(obj: inputGroup) {
         this.value = Number(obj.value.value());
+        this.label = obj.text.value();
 
         this.button = document.createElement("a");
-        this.button.innerText = obj.text.value();
-        this.button.className = "btn btn-primary";
-        // this.button.style.width = "102px";
-        this.button.style.color = "white";
-        this.button.style.borderRadius = "0px";
+        this.button.className = "btn btn-case";
+        this.button.style.cursor = "pointer";
+        this.button.innerHTML = `<span class="case-number">${this.label}</span>`;
 
-        this.status = true; 
+        this.status = true;
     }
 }
