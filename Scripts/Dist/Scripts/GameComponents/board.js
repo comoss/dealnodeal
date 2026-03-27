@@ -26,6 +26,7 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
                         Briefcase.button.className = "btn btn-primary";
                     }
                     _this.currentOffer.innerText = formatStrings_1.formatStrings.currency(_this.calculateOffer());
+                    _this.saveState();
                 });
                 this_1.cases.push(Briefcase);
                 this_1.boardContainer.appendChild(Briefcase.button);
@@ -55,8 +56,39 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
             }
             return median / AmountActive;
         };
+        board.prototype.saveState = function () {
+            var state = {
+                name: this.name,
+                cases: this.cases.map(function (c) { return ({
+                    label: c.button.innerText,
+                    value: c.value,
+                    status: c.status
+                }); }),
+                currentOffer: this.currentOffer.innerText
+            };
+            localStorage.setItem(board.STORAGE_KEY, JSON.stringify(state));
+        };
+        board.prototype.restoreState = function (savedCases, savedOffer) {
+            for (var i = 0; i < this.cases.length && i < savedCases.length; i++) {
+                this.cases[i].status = savedCases[i].status;
+                this.cases[i].button.className = savedCases[i].status ? "btn btn-primary" : "btn btn-danger";
+            }
+            this.currentOffer.innerText = savedOffer;
+        };
+        board.loadState = function () {
+            var stored = localStorage.getItem(board.STORAGE_KEY);
+            if (!stored) return null;
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                return null;
+            }
+        };
+        board.clearState = function () {
+            localStorage.removeItem(board.STORAGE_KEY);
+        };
+        board.STORAGE_KEY = 'dealnodeal_state';
         return board;
     }());
     exports.board = board;
 });
-//# sourceMappingURL=board.js.map

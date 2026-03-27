@@ -4,14 +4,27 @@ import { createGameForm } from "./GameCreationComponents/createGameForm";
 
 class main {
     public static run() {
-        const form = new createGameForm(); 
+        const form = new createGameForm();
         form.mainContainer.appendto(document.getElementById("app"));
 
         const boardsContainer = document.getElementById("boardsContainer");
 
+        // Restore saved game state if available
+        const savedState = board.loadState();
+        if (savedState) {
+            const fakeInputGroups = savedState.cases.map(c => ({
+                text: { value: () => c.label },
+                value: { value: () => String(c.value) }
+            })) as any;
 
-        // new showDivButton(document.getElementById("boardsContainer"))
+            const b = new board(savedState.name, fakeInputGroups);
+            b.populateValues(boardsContainer);
+            b.restoreState(savedState.cases, savedState.currentOffer);
+        }
+
         document.getElementById("newGame").addEventListener("click", () => {
+            board.clearState();
+            boardsContainer.innerHTML = '';
             const name = (<HTMLInputElement>document.getElementById("gameName")).value.trim();
             const b = new board(name, form.inputGroups);
             b.populateValues(boardsContainer);
@@ -19,4 +32,4 @@ class main {
     }
 }
 
-export = main; 
+export = main;
