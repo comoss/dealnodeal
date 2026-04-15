@@ -424,6 +424,76 @@
             scrollbar-width: thin;
             scrollbar-color: #303060 transparent;
         }
+
+        /* ── PLAYER VIEW BADGE ── */
+        .player-view-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #003300, #006600);
+            border: 1px solid #00aa00;
+            color: #00ee00;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            padding: 2px 12px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* ── WAITING PANEL (player view, no game active) ── */
+        .waiting-panel {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-muted-custom);
+        }
+
+        .waiting-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+
+        .waiting-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 5px;
+            color: #5050a0;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .waiting-message { font-size: 1rem; color: #505080; }
+
+        /* ── DEAL PENDING (player view, offer shown) ── */
+        .deal-pending {
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            color: #7070a0;
+            text-transform: uppercase;
+            padding: 0.6rem;
+            animation: pv-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pv-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        /* ── OPEN PLAYER VIEW LINK ── */
+        .player-view-link {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #5588cc;
+            text-decoration: none;
+            padding: 4px 10px;
+            border: 1px solid #334466;
+            border-radius: 4px;
+            font-family: 'Roboto Condensed', sans-serif;
+            white-space: nowrap;
+        }
+
+        .player-view-link:hover {
+            color: #88aaee;
+            border-color: #5577aa;
+            text-decoration: none;
+        }
     </style>
 </head>
 

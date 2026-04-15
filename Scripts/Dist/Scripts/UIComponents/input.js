@@ -25,6 +25,10 @@ define(["require", "exports", "./element"], function (require, exports, element_
         input.prototype.defaultValue = function (value) {
             this.element.defaultValue = value;
         };
+        input.prototype.setValue = function (value) {
+            this.element.value = String(value);
+            this.element.defaultValue = String(value);
+        };
         input.prototype.value = function () {
             return this.element.value;
         };
