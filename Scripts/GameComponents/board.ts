@@ -16,6 +16,7 @@ interface BoardState {
     casesOpenedThisRound: number;
     waitingForDeal: boolean;
     gameOver: boolean;
+    dealTaken: boolean;
 }
 
 export class board {
@@ -29,6 +30,7 @@ export class board {
     private casesOpenedThisRound: number = 0;
     private waitingForDeal: boolean = false;
     private gameOver: boolean = false;
+    private dealTaken: boolean = false;
     private lastOfferValue: number = 0;
 
     private roundInfoEl: HTMLDivElement;
@@ -148,6 +150,7 @@ export class board {
 
     private handleDeal(offer: number): void {
         this.gameOver = true;
+        this.dealTaken = true;
         this.offerContainer.innerHTML = `
             <div class="game-over-panel deal-taken">
                 <div class="game-over-icon">&#129309;</div>
@@ -158,7 +161,7 @@ export class board {
         `;
         this.offerContainer.style.display = "block";
         if (this.roundInfoEl) this.roundInfoEl.style.display = "none";
-        board.clearState();
+        this.saveState();
     }
 
     private handleNoDeal(): void {
@@ -198,7 +201,7 @@ export class board {
         `;
         this.offerContainer.style.display = "block";
         if (this.roundInfoEl) this.roundInfoEl.style.display = "none";
-        board.clearState();
+        this.saveState();
     }
 
     private updateRoundInfo(casesLeft: number): void {
@@ -235,7 +238,8 @@ export class board {
             roundIndex: this.roundIndex,
             casesOpenedThisRound: this.casesOpenedThisRound,
             waitingForDeal: this.waitingForDeal,
-            gameOver: this.gameOver
+            gameOver: this.gameOver,
+            dealTaken: this.dealTaken
         };
         localStorage.setItem(board.STORAGE_KEY, JSON.stringify(state));
     }
@@ -245,6 +249,7 @@ export class board {
         this.casesOpenedThisRound = savedState.casesOpenedThisRound || 0;
         this.waitingForDeal = savedState.waitingForDeal || false;
         this.gameOver = savedState.gameOver || false;
+        this.dealTaken = savedState.dealTaken || false;
         this.lastOfferValue = savedState.currentOfferValue || 0;
 
         for (let i = 0; i < this.cases.length && i < savedState.cases.length; i++) {
@@ -261,6 +266,29 @@ export class board {
 
         if (this.gameOver) {
             if (this.roundInfoEl) this.roundInfoEl.style.display = "none";
+            if (this.dealTaken) {
+                this.offerContainer.innerHTML = `
+                    <div class="game-over-panel deal-taken">
+                        <div class="game-over-icon">&#129309;</div>
+                        <div class="game-over-title">DEAL!</div>
+                        <div class="game-over-amount">${formatStrings.currency(this.lastOfferValue)}</div>
+                        <div class="game-over-name">Congratulations, ${this.name}!</div>
+                    </div>
+                `;
+                this.offerContainer.style.display = "block";
+            } else {
+                const lastCase = this.cases.find(c => c.status);
+                const finalValue = lastCase ? lastCase.value : 0;
+                this.offerContainer.innerHTML = `
+                    <div class="game-over-panel no-deal-end">
+                        <div class="game-over-icon">&#127881;</div>
+                        <div class="game-over-title">YOU WIN!</div>
+                        <div class="game-over-amount">${formatStrings.currency(finalValue)}</div>
+                        <div class="game-over-name">${this.name} kept their case!</div>
+                    </div>
+                `;
+                this.offerContainer.style.display = "block";
+            }
         } else if (this.waitingForDeal) {
             this.showBankerOffer(this.lastOfferValue);
         } else {

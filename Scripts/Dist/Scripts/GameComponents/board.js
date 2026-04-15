@@ -8,6 +8,7 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
             this.casesOpenedThisRound = 0;
             this.waitingForDeal = false;
             this.gameOver = false;
+            this.dealTaken = false;
             this.lastOfferValue = 0;
             this.name = name;
             this.boardContainer = document.createElement("div");
@@ -88,11 +89,12 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
         };
         board.prototype.handleDeal = function (offer) {
             this.gameOver = true;
+            this.dealTaken = true;
             this.offerContainer.innerHTML = "\n            <div class=\"game-over-panel deal-taken\">\n                <div class=\"game-over-icon\">&#129309;</div>\n                <div class=\"game-over-title\">DEAL!</div>\n                <div class=\"game-over-amount\">".concat(formatStrings_1.formatStrings.currency(offer), "</div>\n                <div class=\"game-over-name\">Congratulations, ").concat(this.name, "!</div>\n            </div>\n        ");
             this.offerContainer.style.display = "block";
             if (this.roundInfoEl)
                 this.roundInfoEl.style.display = "none";
-            board.clearState();
+            this.saveState();
         };
         board.prototype.handleNoDeal = function () {
             this.waitingForDeal = false;
@@ -122,7 +124,7 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
             this.offerContainer.style.display = "block";
             if (this.roundInfoEl)
                 this.roundInfoEl.style.display = "none";
-            board.clearState();
+            this.saveState();
         };
         board.prototype.updateRoundInfo = function (casesLeft) {
             if (!this.roundInfoEl)
@@ -158,7 +160,8 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
                 roundIndex: this.roundIndex,
                 casesOpenedThisRound: this.casesOpenedThisRound,
                 waitingForDeal: this.waitingForDeal,
-                gameOver: this.gameOver
+                gameOver: this.gameOver,
+                dealTaken: this.dealTaken
             };
             localStorage.setItem(board.STORAGE_KEY, JSON.stringify(state));
         };
@@ -167,6 +170,7 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
             this.casesOpenedThisRound = savedState.casesOpenedThisRound || 0;
             this.waitingForDeal = savedState.waitingForDeal || false;
             this.gameOver = savedState.gameOver || false;
+            this.dealTaken = savedState.dealTaken || false;
             this.lastOfferValue = savedState.currentOfferValue || 0;
             for (var i = 0; i < this.cases.length && i < savedState.cases.length; i++) {
                 var bc = this.cases[i];
@@ -181,6 +185,16 @@ define(["require", "exports", "./../Utils/formatStrings", "./briefcase"], functi
             if (this.gameOver) {
                 if (this.roundInfoEl)
                     this.roundInfoEl.style.display = "none";
+                if (this.dealTaken) {
+                    this.offerContainer.innerHTML = "\n                    <div class=\"game-over-panel deal-taken\">\n                        <div class=\"game-over-icon\">&#129309;</div>\n                        <div class=\"game-over-title\">DEAL!</div>\n                        <div class=\"game-over-amount\">".concat(formatStrings_1.formatStrings.currency(this.lastOfferValue), "</div>\n                        <div class=\"game-over-name\">Congratulations, ").concat(this.name, "!</div>\n                    </div>\n                ");
+                    this.offerContainer.style.display = "block";
+                }
+                else {
+                    var lastCase = this.cases.find(function (c) { return c.status; });
+                    var finalValue = lastCase ? lastCase.value : 0;
+                    this.offerContainer.innerHTML = "\n                    <div class=\"game-over-panel no-deal-end\">\n                        <div class=\"game-over-icon\">&#127881;</div>\n                        <div class=\"game-over-title\">YOU WIN!</div>\n                        <div class=\"game-over-amount\">".concat(formatStrings_1.formatStrings.currency(finalValue), "</div>\n                        <div class=\"game-over-name\">").concat(this.name, " kept their case!</div>\n                    </div>\n                ");
+                    this.offerContainer.style.display = "block";
+                }
             }
             else if (this.waitingForDeal) {
                 this.showBankerOffer(this.lastOfferValue);
