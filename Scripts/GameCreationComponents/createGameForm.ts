@@ -25,8 +25,8 @@ export class createGameForm {
     teamInputGroup = new div();
     amountsInput = new div();
     hideAmountsInputGroup = new Button();
-    // Family-friendly values: $0.01 – $100 (usable with real cash)
-    defaults = [0.01, 0.05, 0.10, 0.25, 0.50, 1, 1.50, 2, 2.50, 3, 4, 5, 7, 10, 12, 15, 20, 25, 30, 35, 40, 50, 60, 75, 100];
+    // Family-friendly values: $0.01 – $100 (usable with real cash) — 26 values
+    defaults = [0.01, 0.05, 0.10, 0.25, 0.50, 1, 1.50, 2, 2.50, 3, 4, 5, 7, 10, 12, 15, 20, 25, 30, 35, 40, 45, 50, 60, 75, 100];
     // Original TV show values (kept for the "TV Show" preset)
     private tvDefaults = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
     showinputs = new Button();
